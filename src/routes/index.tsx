@@ -82,11 +82,46 @@ function Home() {
 function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        setOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 1024) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown, { passive: true });
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [open]);
 
   const links = [
     { href: "#about", label: "About" },
@@ -97,10 +132,12 @@ function Nav() {
     { href: "#contact", label: "Contact" },
   ];
 
+  const showSolid = scrolled || open;
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/85 backdrop-blur-lg shadow-sm" : "bg-transparent"
+        showSolid ? "bg-white/90 backdrop-blur-lg shadow-sm" : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-5 md:px-8 flex items-center justify-between h-16 md:h-20">
@@ -109,10 +146,10 @@ function Nav() {
             <Plane className="h-5 w-5 text-white -rotate-45" />
           </div>
           <div className="leading-tight">
-            <div className={`font-display text-lg font-semibold ${scrolled ? "text-primary-deep" : "text-white"}`}>
+            <div className={`font-display text-lg font-semibold ${showSolid ? "text-primary-deep" : "text-white"}`}>
               TopShot
             </div>
-            <div className={`text-[10px] tracking-[0.2em] uppercase ${scrolled ? "text-muted-foreground" : "text-white/80"}`}>
+            <div className={`text-[10px] tracking-[0.2em] uppercase ${showSolid ? "text-muted-foreground" : "text-white/80"}`}>
               All Travels & Tours
             </div>
           </div>
@@ -124,7 +161,7 @@ function Nav() {
               key={l.href}
               href={l.href}
               className={`text-sm font-medium transition-colors ${
-                scrolled ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"
+                showSolid ? "text-foreground hover:text-primary" : "text-white/90 hover:text-white"
               }`}
             >
               {l.label}
@@ -139,37 +176,45 @@ function Nav() {
         </nav>
 
         <button
-          className={`lg:hidden p-2 rounded-md ${scrolled ? "text-foreground" : "text-white"}`}
+          ref={buttonRef}
+          type="button"
+          className={`lg:hidden relative z-[60] p-2 rounded-md ${showSolid ? "text-primary-deep" : "text-white"}`}
           onClick={() => setOpen((v) => !v)}
-          aria-label="Menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {open && (
-        <div className="lg:hidden bg-white shadow-lg border-t">
-          <div className="px-5 py-4 flex flex-col gap-1">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="py-3 text-foreground hover:text-primary font-medium border-b border-border/60"
-              >
-                {l.label}
-              </a>
-            ))}
+      <div
+        id="mobile-nav"
+        ref={menuRef}
+        className={`lg:hidden overflow-hidden bg-white shadow-lg border-t transition-[max-height,opacity] duration-300 ease-out ${
+          open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="px-5 py-4 flex flex-col gap-1">
+          {links.map((l) => (
             <a
-              href="#booking"
+              key={l.href}
+              href={l.href}
               onClick={() => setOpen(false)}
-              className="mt-3 rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-white"
+              className="py-3 text-foreground hover:text-primary font-medium border-b border-border/60"
             >
-              Book Your Trip
+              {l.label}
             </a>
-          </div>
+          ))}
+          <a
+            href="#booking"
+            onClick={() => setOpen(false)}
+            className="mt-3 rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-white"
+          >
+            Book Your Trip
+          </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
