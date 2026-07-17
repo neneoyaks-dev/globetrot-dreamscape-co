@@ -254,7 +254,7 @@ function Hero() {
           </a>
         </div>
 
-        <div className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 max-w-5xl mx-auto">
+        <div className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5 max-w-5xl mx-auto">
           {[
             { n: "2012", l: "Established" },
             { n: "50+", l: "International Destinations" },
@@ -262,9 +262,18 @@ function Hero() {
             { n: "Global", l: "Study Abroad Support" },
             { n: "12+ Yrs", l: "Trusted Experts" },
           ].map((s) => (
-            <div key={s.l} className="glass-card rounded-2xl px-4 py-5 text-center">
-              <div className="font-display text-2xl md:text-3xl font-semibold text-white">{s.n}</div>
-              <div className="mt-1 text-[11px] md:text-xs uppercase tracking-wider text-white/80">{s.l}</div>
+            <div
+              key={s.l}
+              className="group relative overflow-hidden rounded-2xl border border-white/25 bg-white/10 backdrop-blur-xl px-4 py-6 text-center shadow-[0_8px_32px_rgba(10,20,60,0.25)] hover:bg-white/15 hover:border-gold/50 transition-all duration-300"
+            >
+              <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+              <div className="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow-sm">
+                {s.n}
+              </div>
+              <div className="mx-auto mt-2 h-px w-8 bg-gold/70" />
+              <div className="mt-2 text-[11px] md:text-xs uppercase tracking-[0.18em] text-white/90 font-medium">
+                {s.l}
+              </div>
             </div>
           ))}
         </div>
