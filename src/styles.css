@@ -138,13 +138,53 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+@theme inline {
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-deep: var(--primary-deep);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 }
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility glass-card {
+  background: color-mix(in oklab, white 70%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in oklab, white 60%, transparent);
+}
+
+@keyframes float-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-float-in {
+  animation: float-in 0.8s ease-out both;
+}
+
