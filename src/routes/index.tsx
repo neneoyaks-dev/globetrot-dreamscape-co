@@ -385,7 +385,7 @@ function Packages() {
     {
       name: "Kenya Safari Experience",
       img: IMG.kenya,
-      price: "₦2.4 Million",
+      price: "₦2,400,000",
       priceNote: "per person",
       desc: "Embark on an unforgettable wildlife adventure through Kenya's breathtaking landscapes, from the Maasai Mara to Amboseli. Experience Africa's iconic safari in style.",
       inclusions: [
@@ -401,7 +401,7 @@ function Packages() {
     {
       name: "Seychelles Getaway",
       img: IMG.seychellesPack,
-      price: "₦2.438 Million",
+      price: "₦2,438,000",
       priceNote: "per person",
       desc: "Escape to the beautiful Indian Ocean with pristine beaches, crystal-clear waters and tropical island luxury.",
       inclusions: [
@@ -418,7 +418,7 @@ function Packages() {
     {
       name: "Egypt Experience",
       img: IMG.egypt,
-      price: "₦2.300 Million",
+      price: "₦2,300,000",
       priceNote: "per person (Not Sharing)",
       desc: "Journey through 5,000 years of civilization by exploring the Great Pyramid of Giza, the Sphinx, Luxor Temple and a memorable Nile Cruise.",
       inclusions: [
